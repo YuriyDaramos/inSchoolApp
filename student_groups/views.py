@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
 
 from courses.models import Course
 from lessons.models import Lesson
@@ -31,6 +30,7 @@ def add_group(request, course_id):
                     }
             new_group = form.save(commit=False)
             new_group.schedule = schedule
+            new_group.course = course
             new_group.save()
             new_group.courses.add(course)
             return redirect("course_detail", course_id=course.id)
