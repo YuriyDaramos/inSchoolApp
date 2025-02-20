@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Students to {{ group.name }}{% endblock %}
+
+{% block content %}
+    <h2>Add Students to Group: {{ group.name }}</h2>
+
+    <h3>Current Students</h3>
+    <ul>
+        {% for student in group.students.all %}
+            <li>
+                {{ student.get_full_name }}
+                <form method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="student_id" value="{{ student.id }}">
+                    <button type="submit" name="remove_student" value="{{ student.id }}">Remove</button>
+                </form>
+            </li>
+        {% empty %}
+            <p>No students in this group yet.</p>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h3>Search for Students to Add</h3>
+    <form method="GET">
+        <input type="text" name="q" placeholder="Enter last name" value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        {% for student in students %}
+            <li>
+                {{ student.get_full_name }}
+                <form method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="student_id" value="{{ student.id }}">
+                    <button type="submit" name="add_student" value="{{ student.id }}">Add</button>
+                </form>
+            </li>
+        {% empty %}
+            <p>No students found.</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'group_detail' group.id %}">Back to Group</a>
+{% endblock %}

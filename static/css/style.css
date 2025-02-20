@@ -1,0 +1,88 @@
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif; /* Простая и читаемая гарнитура */
+    background-color: #f4f4f4; /* Светло-серый фон */
+    color: #333; /* Темный цвет текста */
+    margin: 0;
+    padding: 0;
+}
+
+/* Навигация */
+nav {
+    background-color: #333; /* Темный фон навигации */
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 16px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Основной контент */
+main {
+    width: 80%;
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+/* Списки */
+ul, ol {
+    padding-left: 20px;
+}
+
+ul li, ol li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+ul li:last-child, ol li:last-child {
+    border-bottom: none;
+}
+
+/* Кнопки */
+button, .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover, .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Формы */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+input[type="submit"], button {
+    width: auto;
+}

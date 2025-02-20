@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.name }} - Course{% endblock %}
+
+{% block content %}
+    <h2>{{ course.name }}</h2>
+
+    {% if course.description %}
+        <p><strong>Description:</strong> {{ course.description }}</p>
+    {% endif %}
+
+    {% if course.image %}
+        <img src="{{ course.image.url }}" alt="{{ course.name }}" width="300">
+    {% endif %}
+
+    <h3>Teachers:</h3>
+    <ul>
+        {% for teacher in teachers %}
+            <li><a href="{% url 'user_profile' teacher.id %}">{{ teacher.first_name }} {{ teacher.last_name }}</a></li>
+        {% empty %}
+            <li>No teachers assigned to this course.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Groups:</h3>
+    <ul>
+        {% for group in groups %}
+            <li><a href="{% url 'group_detail' group.id %}">{{ group.name }}</a></li>
+        {% empty %}
+            <li>No groups assigned to this course.</li>
+        {% endfor %}
+    </ul>
+
+    {% if is_admin %}
+        <a href="{% url 'edit_course' course.id %}">Edit Course</a> |
+        <a href="{% url 'add_group' course.id %}">Add Group</a> |
+    {% endif %}
+
+    <br>
+    <a href="{% url 'course_list' %}">Back to Courses</a>
+{% endblock %}

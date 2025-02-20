@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - {{ user_obj.username }}{% endblock %}
+
+{% block content %}
+    <h2>
+        {% for group in user_groups %}
+            {% if group.name == "Students" %}
+                Student
+            {% elif group.name == "Teachers" %}
+                Teacher
+            {% elif group.name == "Administrators" %}
+                Administrator
+            {% endif %}
+        {% endfor %}
+    </h2>
+    <h2>{{ user_obj.username }}</h2>
+
+    <p><strong>First Name:</strong> {{ user_obj.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ user_obj.last_name }}</p>
+    <p><strong>Email:</strong> {{ user_obj.email }}</p>
+    <p><strong>Birth Date:</strong> {{ user_obj.birth_date }}</p>
+
+    {% if user == user_obj %}
+        <a href="{% url 'edit_profile' %}">Edit Profile</a>
+    {% endif %}
+
+    {% if user == user_obj %}
+        <a href="{% url 'calendar' user_obj.id %}">Go to your Calendar</a>
+    {% elif is_admin %}
+        <a href="{% url 'calendar' user_obj.id %}">Go to {{ user_obj.username }} Calendar</a>
+    {% endif %}
+
+    {% if is_admin %}
+        <h3>Change User Group</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <select name="new_group">
+                <option value="Teachers">Teacher</option>
+                <option value="Students">Student</option>
+            </select>
+            <button type="submit" name="change_group">Change Group</button>
+        </form>
+    {% endif %}
+{% endblock %}

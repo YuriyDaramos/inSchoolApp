@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ lesson.name }}</h2>
+    <p>
+        {% if lesson.is_conducted is None %}
+            <span style="color: gray;">[Status: Not Conducted ]</span>
+        {% elif lesson.is_conducted %}
+            <span style="color: green;">[Status: Conducted ✔️]</span>
+        {% else %}
+            <span style="color: red;">[Status: Cancelled ❌ ]</span>
+        {% endif %}
+    </p>
+    {% if is_teacher or is_admin %}
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="status" value="conducted">Mark as Conducted</button>
+            <button type="submit" name="status" value="cancelled">Mark as Cancelled</button>
+            <button type="submit" name="status" value="unset">Unset Status</button>
+        </form>
+    {% endif %}
+    <p><strong>Teacher:</strong> {{ lesson.teacher.get_full_name }}</p>
+    <p><strong>Date:</strong> {{ lesson.date|date:"l, d F Y" }}</p>
+    <p><strong>Time:</strong> {{ lesson.time }}</p>
+    <p><strong>Description:</strong> {{ lesson.description|default:"No description provided." }}</p>
+
+    {% if lesson.materials %}
+        <p><strong>Materials:</strong> <a href="{{ lesson.materials.url }}" download>Download</a></p>
+    {% endif %}
+
+    <a href="{% url 'group_detail' lesson.group.id %}">Back to Group</a>
+    <br>
+
+    {% if previous_lesson %}
+        <a href="{% url 'lesson_detail' previous_lesson.id %}">Previous Lesson</a>
+    {% endif %}
+
+    {% if next_lesson %}
+        <a href="{% url 'lesson_detail' next_lesson.id %}">Next Lesson</a>
+    {% endif %}
+
+    {% if is_admin %}
+        <a href="{% url 'edit_lesson' lesson.id %}">Edit Lesson</a>
+    {% endif %}
+{% endblock %}

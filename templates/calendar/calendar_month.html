@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar for {{ user.username }}{% endblock %}
+
+{% block content %}
+    <h2>Calendar for {{ user.username }}</h2>
+
+    {% if no_lessons_message %}
+        <p>{{ no_lessons_message }}</p>
+    {% endif %}
+
+    <h3>{{ month_name }} {{ year }}</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Course / Group</th>
+                {% for day in days_in_month %}
+                    <th>{{ day }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for course, groups in calendar_data.items %}
+                <tr>
+                    <td colspan="{{ days_in_month|length|add:1 }}" style="background-color: #f0f0f0; font-weight: bold;">
+                        {{ course.name }}
+                    </td>
+                </tr>
+                {% for group, lessons in groups.items %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        {% for day in days_in_month %}
+                            <td>
+                                {% for lesson in lessons %}
+                                    {% if lesson.date.day == day %}
+                                        <a href="{% url 'lesson_detail' lesson.id %}"
+                                           title="{{ lesson.name }} at {{ lesson.time }}">
+                                           {% if lesson.is_conducted == True %}
+                                               ✔
+                                           {% elif lesson.is_conducted == False %}
+                                               ✖
+                                           {% else %}
+                                               □
+                                           {% endif %}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        <a href="?month={{ month|add:'-1' }}&year={{ year }}" class="btn btn-primary">Previous Month</a>
+        <a href="?month={{ month|add:'1' }}&year={{ year }}" class="btn btn-primary">Next Month</a>
+    </div>
+{% endblock %}

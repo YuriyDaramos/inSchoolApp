@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ group.name }} - Group{% endblock %}
+
+{% block content %}
+    <h2>{{ group.name }}</h2>
+
+    {% if group.schedule %}
+        <h3>Schedule:</h3>
+        <ul>
+            {% for day, details in group.schedule.items %}
+                <li>
+                    <strong>{{ day }}:</strong>
+                    {{ details.start_time }} - {{ details.duration }} minutes
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No schedule available for this group.</p>
+    {% endif %}
+
+    <h3>Lessons</h3>
+    <ul>
+        {% for lesson in group.lessons.all %}
+            <li>
+                <a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.name }}</a>
+                {{ lesson.date|date:"l, d M" }} at {{ lesson.time|date:"H:i" }}
+                <span>
+                    {% if lesson.is_conducted is None %}
+                        <span style="color: gray;">[Not Conducted]</span> <!-- Квадратик -->
+                    {% elif lesson.is_conducted %}
+                        <span style="color: green;">[Conducted ✔️]</span> <!-- Галочка -->
+                    {% else %}
+                        <span style="color: red;">[Cancelled ❌ ]</span> <!-- Крестик -->
+                    {% endif %}
+                </span>
+            </li>
+        {% empty %}
+            <p>No lessons scheduled yet.</p>
+        {% endfor %}
+    </ul>
+
+    {% if is_admin %}
+        <a href="{% url 'add_lesson' group.id %}">Add Lesson</a>
+        <br>
+        <a href="{% url 'add_students_to_group' group.id %}">Add Students to Group</a>
+        <br>
+    {% endif %}
+
+    {% if is_admin %}
+        <a href="{% url 'edit_group' group.id %}">Edit Group</a>
+        <br>
+    {% endif %}
+
+    <a href="{% url 'course_detail' group.course_id %}">Back to Course</a>
+{% endblock %}

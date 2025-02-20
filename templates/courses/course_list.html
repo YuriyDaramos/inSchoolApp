@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+    <h2>All Courses</h2>
+
+    {% if is_admin %}
+        <a href="{% url 'create_course' %}">Create New Course</a>
+    {% endif %}
+
+    <ul>
+        {% for course in courses %}
+            <li>
+                <a href="{% url 'course_detail' course.id %}">{{ course.name }}</a>
+                {% if course.description %}
+                    <p>{{ course.description }}</p>
+                {% endif %}
+                {% if course.image %}
+                    <img src="{{ course.image.url }}" alt="{{ course.name }}" width="150">
+                {% endif %}
+                <p><strong>Number of Groups:</strong> {{ course.groups.count }}</p>
+            </li>
+        {% empty %}
+            <li>No courses available.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

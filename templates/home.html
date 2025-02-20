@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Home | inSchoolApp{% endblock %}
+
+{% block content %}
+    <h2>Our teachers</h2>
+    <ul>
+        {% for teacher in teachers %}
+            <li><a href="{% url 'user_profile' teacher.id %}">{{ teacher.first_name }} {{ teacher.last_name }}</a></li>
+        {% empty %}
+            <li>No teachers?</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Our courses</h2>
+    <ul>
+        {% for course in courses %}
+            <li><a href="{% url 'course_detail' course.id %}">{{ course.name }}</a></li>
+        {% empty %}
+            <li>No courses?</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

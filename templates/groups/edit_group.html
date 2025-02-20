@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Group: {{ group.name }}{% endblock %}
+
+{% block content %}
+    <h2>Edit Group: {{ group.name }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}: </label>
+        {{ form.name }}
+        <br>
+
+        <label for="{{ form.teacher.id_for_label }}">{{ form.teacher.label }}: </label>
+        {{ form.teacher }}
+        <br>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Day of Week</th>
+                    <th>Start Time</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Monday</td>
+                    <td>{{ form.monday_start_time }}</td>
+                    <td>{{ form.monday_duration }}</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td>{{ form.tuesday_start_time }}</td>
+                    <td>{{ form.tuesday_duration }}</td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td>{{ form.wednesday_start_time }}</td>
+                    <td>{{ form.wednesday_duration }}</td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td>{{ form.thursday_start_time }}</td>
+                    <td>{{ form.thursday_duration }}</td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td>{{ form.friday_start_time }}</td>
+                    <td>{{ form.friday_duration }}</td>
+                </tr>
+                <tr>
+                    <td>Saturday</td>
+                    <td>{{ form.saturday_start_time }}</td>
+                    <td>{{ form.saturday_duration }}</td>
+                </tr>
+                <tr>
+                    <td>Sunday</td>
+                    <td>{{ form.sunday_start_time }}</td>
+                    <td>{{ form.sunday_duration }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        {% if form.errors %}
+            <div class="form-errors">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <form method="POST" onsubmit="return confirm('Are you sure you want to delete this group and all associated students?');">
+        {% csrf_token %}
+        <button type="submit" name="delete">Delete Group</button>
+    </form>
+
+    <a href="{% url 'group_detail' group.id %}">Cancel</a>
+{% endblock %}

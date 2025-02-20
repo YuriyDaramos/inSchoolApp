@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Lesson - {{ lesson.name }}{% endblock %}
+
+{% block content %}
+    <h2>Edit Lesson: {{ lesson.name }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <form method="POST" onsubmit="return confirm('Are you sure you want to delete this lesson?');">
+        {% csrf_token %}
+        <button type="submit" name="delete">Delete Lesson</button>
+    </form>
+
+    <a href="{% url 'lesson_detail' lesson.id %}">Cancel</a>
+{% endblock %}
