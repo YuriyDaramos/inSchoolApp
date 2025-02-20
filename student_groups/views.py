@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
+
 from courses.models import Course
 from lessons.models import Lesson
 from users.models import CustomUser
@@ -43,12 +45,17 @@ def group_detail(request, group_id):
     group = get_object_or_404(StudentGroup, id=group_id)
     teacher = group.teacher
     lessons = Lesson.objects.filter(group=group)
+
+    upcoming_lessons = lessons.filter(is_conducted__isnull=True).order_by("date", "time")
+    past_lessons = lessons.filter(is_conducted__isnull=False).order_by("date", "time")
+
     is_admin = request.user.groups.filter(name="Administrators").exists()
 
     return render(request, "groups/group_detail.html", {
         "group": group,
         "teacher": teacher,
-        "lessons": lessons,
+        "upcoming_lessons": upcoming_lessons,
+        "past_lessons": past_lessons,
         "is_admin": is_admin
     })
 

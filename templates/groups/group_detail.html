@@ -5,6 +5,15 @@
 {% block content %}
     <h2>{{ group.name }}</h2>
 
+    <h3>Teacher:</h3>
+    <ul>
+        {% if teacher %}
+            <li><a href="{% url 'user_profile' teacher.id %}">{{ teacher.first_name }} {{ teacher.last_name }}</a></li>
+        {% else %}
+            <li>No teachers assigned to this group.</li>
+        {% endif %}
+    </ul>
+
     {% if group.schedule %}
         <h3>Schedule:</h3>
         <ul>
@@ -20,36 +29,50 @@
     {% endif %}
 
     <h3>Lessons</h3>
+
+    <h4>Upcoming Lessons</h4>
     <ul>
-        {% for lesson in group.lessons.all %}
+        {% for lesson in upcoming_lessons %}
             <li>
                 <a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.name }}</a>
                 {{ lesson.date|date:"l, d M" }} at {{ lesson.time|date:"H:i" }}
                 <span>
                     {% if lesson.is_conducted is None %}
-                        <span style="color: gray;">[Not Conducted]</span> <!-- Квадратик -->
-                    {% elif lesson.is_conducted %}
-                        <span style="color: green;">[Conducted ✔️]</span> <!-- Галочка -->
-                    {% else %}
-                        <span style="color: red;">[Cancelled ❌ ]</span> <!-- Крестик -->
+                        <span style="color: gray;">[Not Conducted]</span>
                     {% endif %}
                 </span>
             </li>
         {% empty %}
-            <p>No lessons scheduled yet.</p>
+            <p>No upcoming lessons.</p>
+        {% endfor %}
+    </ul>
+
+    <h4>Past Lessons</h4>
+    <ul>
+        {% for lesson in past_lessons %}
+            <li>
+                <a href="{% url 'lesson_detail' lesson.id %}">{{ lesson.name }}</a>
+                {{ lesson.date|date:"l, d M" }} at {{ lesson.time|date:"H:i" }}
+                <span>
+                    {% if lesson.is_conducted %}
+                        <span style="color: green;">[Conducted ✔️]</span>
+                    {% elif lesson.is_conducted is False %}
+                        <span style="color: red;">[Cancelled ❌]</span>
+                    {% endif %}
+                </span>
+            </li>
+        {% empty %}
+            <p>No past lessons with status.</p>
         {% endfor %}
     </ul>
 
     {% if is_admin %}
-        <a href="{% url 'add_lesson' group.id %}">Add Lesson</a>
-        <br>
-        <a href="{% url 'add_students_to_group' group.id %}">Add Students to Group</a>
-        <br>
+        <a href="{% url 'add_lesson' group.id %}">Add Lesson</a><br>
+        <a href="{% url 'add_students_to_group' group.id %}">Add Students to Group</a><br>
     {% endif %}
 
     {% if is_admin %}
-        <a href="{% url 'edit_group' group.id %}">Edit Group</a>
-        <br>
+        <a href="{% url 'edit_group' group.id %}">Edit Group</a><br>
     {% endif %}
 
     <a href="{% url 'course_detail' group.course_id %}">Back to Course</a>
